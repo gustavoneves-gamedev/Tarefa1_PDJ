@@ -10,8 +10,12 @@ public class PlayerRoot : MonoBehaviour
 
     [SerializeField] private bool isJumping;
     [SerializeField] private float verticalSpeed = 10f;
+    private float defaultVerticalSpeed;
     [SerializeField] private float gravity = 5f;
-    private float defaultVerticalSpeed;    
+
+
+    [SerializeField] private GameObject playerObj;
+    [SerializeField] private Material[] materials; //Eu iria criar materiais para fazer a troca, mas descobri que a unity tem cores padrões
     private CharacterController cc;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -26,6 +30,7 @@ public class PlayerRoot : MonoBehaviour
     {
         DetectTaps();
         DetectSwipes();
+        DetectPinch();
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
@@ -34,6 +39,30 @@ public class PlayerRoot : MonoBehaviour
 
         if (isJumping) Jump();
 
+    }
+
+    private static void DetectPinch()
+    {
+        if (Input.touchCount == 2)
+        {
+            Touch t0 = Input.GetTouch(0);
+            Touch t1 = Input.GetTouch(1);
+
+            Vector2 start0 = t0.position - t0.deltaPosition;
+            Vector2 start1 = t1.position - t1.deltaPosition;
+
+            float startDist = (start0 - start1).magnitude;
+            float atualDist = (t0.position - t1.position).magnitude;
+
+            if (atualDist > startDist)
+            {
+                Debug.Log("Pinch Out (Zoom In)");
+            }
+            else if (atualDist < startDist)
+            {
+                Debug.Log("Pinch In (Zoom Out)");
+            }
+        }
     }
 
     private void DetectSwipes()
@@ -54,13 +83,26 @@ public class PlayerRoot : MonoBehaviour
                 {
                     if (Mathf.Abs(delta.x) > Mathf.Abs(delta.y))
                     {
-                        if (delta.x > 0) Debug.Log("Swipe Right");
-                        else Debug.Log("Swipe Left");
+                        if (delta.x > 0)
+                        {
+                            Debug.Log("Swipe Right");
+                        }
+                        else
+                        {
+                            Debug.Log("Swipe Left");
+                        }
                     }
                     else
                     {
-                        if (delta.y > 0) Debug.Log("Swipe Up");
-                        else Debug.Log("Swipe Down");
+                        if (delta.y > 0)
+                        {
+                            Debug.Log("Swipe Up");
+                            isJumping = true;
+                        }
+                        else
+                        {
+                            Debug.Log("Swipe Down");
+                        }
                     }
                 }
             }
@@ -73,7 +115,7 @@ public class PlayerRoot : MonoBehaviour
         {
             float timeNow = Time.time;
 
-            if (timeNow - lastTapTime < 0.5f)
+            if (timeNow - lastTapTime < 0.3f)
                 tapCount++;
             else
                 tapCount = 1;
@@ -82,18 +124,18 @@ public class PlayerRoot : MonoBehaviour
 
             if (tapCount == 1)
             {
-                Invoke("SingleTap", 0.5f);
+                Invoke("SingleTap", 0.3f);
             }
 
             if (tapCount == 2)
             {
                 CancelInvoke();
-                Invoke("DoubleTap", 0.5f);
+                Invoke("DoubleTap", 0.3f);
             }
             if (tapCount == 3)
             {
                 CancelInvoke();
-                Invoke("TripleTap", 0.5f);
+                Invoke("TripleTap", 0.2f); //Queria colocar instantâneo para o triple, mas decidi só reduzir o tempo para manter o paralelismo
             }
         }
     }
@@ -107,16 +149,18 @@ public class PlayerRoot : MonoBehaviour
     private void DoubleTap()
     {
         Debug.Log("Double Tap");
+        ChangeMaterial1();
     }
 
     private void TripleTap()
     {
         Debug.Log("Triple Tap");
+        ChangeMaterial2();
     }
 
     private void Jump()
     {
-        
+
         Vector3 vertical = Vector3.up * verticalSpeed * Time.deltaTime;
 
         verticalSpeed = verticalSpeed - gravity * Time.deltaTime;
@@ -130,5 +174,14 @@ public class PlayerRoot : MonoBehaviour
         }
     }
 
+    private void ChangeMaterial1()
+    {
+        playerObj.GetComponent<MeshRenderer>().material.color = Color.yellow;
+    }
+
+    private void ChangeMaterial2()
+    {
+        playerObj.GetComponent<MeshRenderer>().material.color = Color.crimson;
+    }
 
 }

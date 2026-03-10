@@ -1180,6 +1180,8 @@ MonoBehaviour:
   swipeDistance: 100
   isJumping: 0
   verticalSpeed: 10
+  gravity: 5
+  playerObj: {fileID: 102249748}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
