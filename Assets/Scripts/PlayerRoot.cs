@@ -11,7 +11,7 @@ public class PlayerRoot : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+
     }
 
     // Update is called once per frame
@@ -55,20 +55,47 @@ public class PlayerRoot : MonoBehaviour
 
     private void DetectTaps()
     {
-        if (Input.touchCount == 1 && Input.GetTouch(0).phase == TouchPhase.Began)
+        if (Input.touchCount == 1 && Input.GetTouch(0).phase == TouchPhase.Began || Input.GetKeyDown(KeyCode.Mouse0))
         {
             float timeNow = Time.time;
 
-            if (timeNow - lastTapTime < 0.3f)
+            if (timeNow - lastTapTime < 0.5f)
                 tapCount++;
             else
                 tapCount = 1;
 
             lastTapTime = timeNow;
 
-            if (tapCount == 1) Debug.Log("Single Tap");
-            if (tapCount == 2) Debug.Log("Double Tap");
-            if (tapCount == 3) Debug.Log("Triple Tap");
+            if (tapCount == 1)
+            {
+                Invoke("SingleTap", 0.5f);
+            }
+
+            if (tapCount == 2)
+            {
+                CancelInvoke();
+                Invoke("DoubleTap", 0.5f);
+            }
+            if (tapCount == 3)
+            {
+                CancelInvoke();
+                Invoke("TripleTap", 0.5f);
+            }
         }
+    }
+
+    private void SingleTap()
+    {
+        Debug.Log("Single Tap");
+    }
+
+    private void DoubleTap()
+    {
+        Debug.Log("Double Tap");
+    }
+
+    private void TripleTap()
+    {
+        Debug.Log("Triple Tap");
     }
 }
