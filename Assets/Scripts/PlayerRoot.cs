@@ -28,9 +28,9 @@ public class PlayerRoot : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        DetectTaps();
         DetectSwipes();
         DetectPinch();
+        DetectTaps();
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
@@ -39,30 +39,6 @@ public class PlayerRoot : MonoBehaviour
 
         if (isJumping) Jump();
 
-    }
-
-    private static void DetectPinch()
-    {
-        if (Input.touchCount == 2)
-        {
-            Touch t0 = Input.GetTouch(0);
-            Touch t1 = Input.GetTouch(1);
-
-            Vector2 start0 = t0.position - t0.deltaPosition;
-            Vector2 start1 = t1.position - t1.deltaPosition;
-
-            float startDist = (start0 - start1).magnitude;
-            float atualDist = (t0.position - t1.position).magnitude;
-
-            if (atualDist > startDist)
-            {
-                Debug.Log("Pinch Out (Zoom In)");
-            }
-            else if (atualDist < startDist)
-            {
-                Debug.Log("Pinch In (Zoom Out)");
-            }
-        }
     }
 
     private void DetectSwipes()
@@ -108,6 +84,32 @@ public class PlayerRoot : MonoBehaviour
             }
         }
     }
+
+    private static void DetectPinch()
+    {
+        if (Input.touchCount == 2)
+        {
+            Touch t0 = Input.GetTouch(0);
+            Touch t1 = Input.GetTouch(1);
+
+            Vector2 start0 = t0.position - t0.deltaPosition;
+            Vector2 start1 = t1.position - t1.deltaPosition;
+
+            float startDist = (start0 - start1).magnitude;
+            float atualDist = (t0.position - t1.position).magnitude;
+
+            if (atualDist > startDist)
+            {
+                Debug.Log("Pinch Out (Zoom In)");
+            }
+            else if (atualDist < startDist)
+            {
+                Debug.Log("Pinch In (Zoom Out)");
+            }
+        }
+    }
+
+    #region Taps
 
     private void DetectTaps()
     {
@@ -157,6 +159,8 @@ public class PlayerRoot : MonoBehaviour
         Debug.Log("Triple Tap");
         ChangeMaterial2();
     }
+
+    #endregion
 
     private void Jump()
     {
