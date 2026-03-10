@@ -15,6 +15,8 @@ public class PlayerRoot : MonoBehaviour
 
 
     [SerializeField] private GameObject playerObj;
+    [SerializeField] private GameObject playerCloneR;
+    [SerializeField] private GameObject playerCloneL;
     [SerializeField] private Material[] materials; //Eu iria criar materiais para fazer a troca, mas descobri que a unity tem cores padrões
     private CharacterController cc;
 
