@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class PlayerRoot : MonoBehaviour
 {
@@ -9,14 +8,16 @@ public class PlayerRoot : MonoBehaviour
     private Vector2 startTouch;
     [SerializeField] private float swipeDistance = 100f;
 
-    private bool isJumping;
+    [SerializeField] private bool isJumping;
     [SerializeField] private float verticalSpeed = 10f;
+    private float defaultVerticalSpeed;    
     private CharacterController cc;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
         cc = GetComponent<CharacterController>();
+        defaultVerticalSpeed = verticalSpeed;
     }
 
     // Update is called once per frame
@@ -114,9 +115,18 @@ public class PlayerRoot : MonoBehaviour
 
     private void Jump()
     {
-        Vector3 move = new Vector3(0, verticalSpeed * Time.deltaTime, 0);
         
-        cc.Move(move);
+        Vector3 vertical = Vector3.up * verticalSpeed * Time.deltaTime;
+
+        verticalSpeed -= .1f;
+
+        cc.Move(vertical);
+
+        if (cc.isGrounded)
+        {
+            isJumping = false;
+            verticalSpeed = defaultVerticalSpeed;
+        }
     }
 
 
