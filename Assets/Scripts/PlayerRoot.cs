@@ -10,6 +10,7 @@ public class PlayerRoot : MonoBehaviour
 
     [SerializeField] private bool isJumping;
     [SerializeField] private float verticalSpeed = 10f;
+    [SerializeField] private float gravity = 5f;
     private float defaultVerticalSpeed;    
     private CharacterController cc;
 
@@ -118,7 +119,7 @@ public class PlayerRoot : MonoBehaviour
         
         Vector3 vertical = Vector3.up * verticalSpeed * Time.deltaTime;
 
-        verticalSpeed -= .1f;
+        verticalSpeed = verticalSpeed - gravity * Time.deltaTime;
 
         cc.Move(vertical);
 
