@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class PlayerRoot : MonoBehaviour
 {
@@ -8,10 +9,14 @@ public class PlayerRoot : MonoBehaviour
     private Vector2 startTouch;
     [SerializeField] private float swipeDistance = 100f;
 
+    private bool isJumping;
+    [SerializeField] private float verticalSpeed = 10f;
+    private CharacterController cc;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-
+        cc = GetComponent<CharacterController>();
     }
 
     // Update is called once per frame
@@ -19,6 +24,13 @@ public class PlayerRoot : MonoBehaviour
     {
         DetectTaps();
         DetectSwipes();
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            isJumping = true;
+        }
+
+        if (isJumping) Jump();
 
     }
 
@@ -86,6 +98,7 @@ public class PlayerRoot : MonoBehaviour
 
     private void SingleTap()
     {
+        //Colocar a troca de cena aqui
         Debug.Log("Single Tap");
     }
 
@@ -98,4 +111,13 @@ public class PlayerRoot : MonoBehaviour
     {
         Debug.Log("Triple Tap");
     }
+
+    private void Jump()
+    {
+        Vector3 move = new Vector3(0, verticalSpeed * Time.deltaTime, 0);
+        
+        cc.Move(move);
+    }
+
+
 }
