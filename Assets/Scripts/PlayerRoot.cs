@@ -8,7 +8,7 @@ public class PlayerRoot : MonoBehaviour
     private float lastTapTime;
     private int tapCount;
     private Vector2 startTouch;
-    //private bool canTap = true;
+    private bool hasSwipe;
     private float touchTime;
 
     [Header("Player Movement")]
@@ -63,7 +63,7 @@ public class PlayerRoot : MonoBehaviour
         }
 
         //Clone Skill
-        if (Input.GetKeyDown(KeyCode.C) && !isCloneMoving && playerCloneR != null && playerCloneL != null)
+        if (Input.GetKeyDown(KeyCode.C) && !isCloneMoving && playerCloneR != null)
         {
             canCloneMove = true;
             isCloneMoving = true;
@@ -91,6 +91,7 @@ public class PlayerRoot : MonoBehaviour
             {
                 startTouch = t.position;
                 touchTime = Time.time;
+                hasSwipe = false;
             }
             else if (t.phase == TouchPhase.Ended)
             {
@@ -98,6 +99,8 @@ public class PlayerRoot : MonoBehaviour
 
                 if (delta.magnitude > swipeDistance)
                 {
+                    hasSwipe = true;
+
                     if (Mathf.Abs(delta.x) > Mathf.Abs(delta.y))
                     {
                         if (delta.x > 0)
@@ -115,6 +118,7 @@ public class PlayerRoot : MonoBehaviour
                         {
                             Debug.Log("Swipe Up");
                             isJumping = true;
+                            tapCount = 0;
                         }
                         else
                         {
@@ -169,9 +173,14 @@ public class PlayerRoot : MonoBehaviour
     #region Taps
     private void DetectTaps()
     {
-        if (Input.touchCount == 1 && Input.GetTouch(0).phase == TouchPhase.Ended || Input.GetKeyDown(KeyCode.Mouse0))
+        if (Input.touchCount == 1 && Input.GetTouch(0).phase == TouchPhase.Ended) //|| Input.GetKeyDown(KeyCode.Mouse0)
         {
-            if (touchTime - Time.time > 0.15f) return;
+            if (Time.time - touchTime > 0.15f || hasSwipe)
+            {
+                tapCount = 0;
+                return;
+            }
+
 
             float timeNow = Time.time;
 

@@ -1177,7 +1177,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 61d31ca3818bb3a4e92c818e6519750a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlayerRoot
-  swipeDistance: 100
+  swipeDistance: 20
   isJumping: 0
   verticalSpeed: 10
   gravity: 10
