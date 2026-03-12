@@ -17,7 +17,9 @@ public class PlayerRoot : MonoBehaviour
 
     [Header("Clone Skill")]
     [SerializeField] private float cloneSpeed = 20f;
+    private Vector3 defaultPosition;
     private bool canCloneMove;
+    private bool isCloneMoving;
     private bool isCloneOut; //Para um controle mais refinado, eu teria que criar variáveis para cada clone, mas dada a 
                              //natureza do exercício, decidi manter simples
 
@@ -35,6 +37,7 @@ public class PlayerRoot : MonoBehaviour
     {
         cc = GetComponent<CharacterController>();
         defaultVerticalSpeed = verticalSpeed;
+        defaultPosition = transform.position;
 
     }
 
@@ -45,19 +48,17 @@ public class PlayerRoot : MonoBehaviour
         DetectPinch();
         DetectTaps();
 
-        if (Input.GetKeyDown(KeyCode.C))
+        if (Input.GetKeyDown(KeyCode.C) && !isCloneMoving)
         {
             canCloneMove = true;
+            isCloneMoving = true;
 
             if (!isCloneOut)
             {
                 playerCloneL.SetActive(true);
                 playerCloneR.SetActive(true);
             }
-            else
-            {
-
-            }
+            
         }
 
         Clone();
@@ -225,7 +226,7 @@ public class PlayerRoot : MonoBehaviour
 
     private void Clone() //Pinch Out
     {
-        if (!canCloneMove || isCloneOut) return;
+        if (!canCloneMove) return;
         CloneMovement(playerCloneL, 0);
         CloneMovement(playerCloneR, 1);
 
@@ -241,27 +242,47 @@ public class PlayerRoot : MonoBehaviour
 
     private void CloneMovement(GameObject clone, int code)
     {
-        if (isCloneOut)
+        int i = 1;
+        if (isCloneOut) i = -1;
 
         if (code == 0)
         {
-            clone.transform.Translate(Vector3.left * cloneSpeed * Time.deltaTime);
-            if (clone.transform.position.x <= -2)
+            clone.transform.Translate(Vector3.left * cloneSpeed * i * Time.deltaTime);
+            
+            if (isCloneOut && clone.transform.position.x >= 0)
+            {
+                canCloneMove = false;
+                isCloneOut = false;
+                isCloneMoving = false;
+
+            }
+            else if (clone.transform.position.x <= -2)
             {
                 canCloneMove = false;
                 isCloneOut = true;
+                isCloneMoving = false;
             }
         }
 
         if (code == 1)
         {
-            clone.transform.Translate(Vector3.right * cloneSpeed * Time.deltaTime);
-            if (clone.transform.position.x >= 2)
+            clone.transform.Translate(Vector3.right * cloneSpeed * i * Time.deltaTime);
+
+            if (isCloneOut && clone.transform.position.x <= 0)
             {
-                canCloneMove = false; //Estou repetindo aqui, mas não precisaria uma vez que a bool que controla os
-                                      //os dois clones já está sendo definida no if acima
-                isCloneOut = true;
+                canCloneMove = false;
+                isCloneOut = false;
+                isCloneMoving = false;
+
             }
+            else if (clone.transform.position.x >= 2)
+            {
+                canCloneMove = false; //Estou repetindo aqui, mas acho que não precisaria uma vez que a bool que
+                                      //controla os dois clones já está sendo definida no if acima
+                isCloneOut = true;
+                isCloneMoving = false;
+            }
+
         }
     }
 
