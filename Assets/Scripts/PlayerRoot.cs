@@ -184,16 +184,20 @@ public class PlayerRoot : MonoBehaviour
             isJumping = false;
             verticalSpeed = defaultVerticalSpeed;
         }
-    }
+    } //Swipe Up
 
     private void ChangeMaterial1()
     {
         playerObj.GetComponent<MeshRenderer>().material.color = Color.yellow;
-    }
+    } //Double Tap
 
     private void ChangeMaterial2()
     {
         playerObj.GetComponent<MeshRenderer>().material.color = Color.crimson;
-    }
+    } //Triple Tap
 
+    private void Clone()
+    {
+
+    }
 }
