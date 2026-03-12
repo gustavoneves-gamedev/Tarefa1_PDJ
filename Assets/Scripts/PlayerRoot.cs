@@ -48,6 +48,19 @@ public class PlayerRoot : MonoBehaviour
         DetectPinch();
         DetectTaps();
 
+        //Jump 
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            isJumping = true;
+        }
+
+        if (isJumping)
+        {
+            Jump();
+            return;
+        }
+
+        //Clone Skill
         if (Input.GetKeyDown(KeyCode.C) && !isCloneMoving && playerCloneR != null)
         {
             canCloneMove = true;
@@ -58,18 +71,11 @@ public class PlayerRoot : MonoBehaviour
                 playerCloneL.SetActive(true);
                 playerCloneR.SetActive(true);
             }
-            
+
         }
 
         Clone();
 
-
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            isJumping = true;
-        }
-
-        if (isJumping) Jump();
 
     }
 
@@ -230,7 +236,7 @@ public class PlayerRoot : MonoBehaviour
         CloneMovement(playerCloneL, 0);
         CloneMovement(playerCloneR, 1);
 
-    }    
+    }
 
     private void CloneMovement(GameObject clone, int code)
     {
@@ -240,7 +246,7 @@ public class PlayerRoot : MonoBehaviour
         if (code == 0)
         {
             clone.transform.Translate(Vector3.left * cloneSpeed * i * Time.deltaTime);
-            
+
             if (isCloneOut && clone.transform.position.x >= 0)
             {
                 canCloneMove = false;
