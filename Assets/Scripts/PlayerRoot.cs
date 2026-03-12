@@ -8,6 +8,8 @@ public class PlayerRoot : MonoBehaviour
     private float lastTapTime;
     private int tapCount;
     private Vector2 startTouch;
+    //private bool canTap = true;
+    private float touchTime;
 
     [Header("Player Movement")]
     [SerializeField] private bool isJumping;
@@ -88,6 +90,7 @@ public class PlayerRoot : MonoBehaviour
             if (t.phase == TouchPhase.Began)
             {
                 startTouch = t.position;
+                touchTime = Time.time;
             }
             else if (t.phase == TouchPhase.Ended)
             {
@@ -166,8 +169,10 @@ public class PlayerRoot : MonoBehaviour
     #region Taps
     private void DetectTaps()
     {
-        if (Input.touchCount == 1 && Input.GetTouch(0).phase == TouchPhase.Began || Input.GetKeyDown(KeyCode.Mouse0))
+        if (Input.touchCount == 1 && Input.GetTouch(0).phase == TouchPhase.Ended || Input.GetKeyDown(KeyCode.Mouse0))
         {
+            if (touchTime - Time.time > 0.15f) return;
+
             float timeNow = Time.time;
 
             if (timeNow - lastTapTime < 0.3f)
