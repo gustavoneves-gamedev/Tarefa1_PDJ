@@ -14,8 +14,9 @@ public class PlayerRoot : MonoBehaviour
     [SerializeField] private float verticalSpeed = 10f;
     private float defaultVerticalSpeed;
     [SerializeField] private float gravity = 5f;
+    private bool canCloneMove;
 
-    
+
     [Header("References")]
     [SerializeField] private GameObject playerObj;
     [SerializeField] private GameObject playerCloneR;
@@ -29,7 +30,7 @@ public class PlayerRoot : MonoBehaviour
     {
         cc = GetComponent<CharacterController>();
         defaultVerticalSpeed = verticalSpeed;
-        
+
     }
 
 
@@ -38,6 +39,16 @@ public class PlayerRoot : MonoBehaviour
         DetectSwipes();
         DetectPinch();
         DetectTaps();
+
+        if (Input.GetKeyDown(KeyCode.C))
+        {
+            canCloneMove = true;
+            playerCloneL.SetActive(true);
+            playerCloneR.SetActive(true);
+        }
+
+        Clone();
+
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
@@ -198,6 +209,25 @@ public class PlayerRoot : MonoBehaviour
 
     private void Clone()
     {
+        if (!canCloneMove) return;
+        CloneMovement(playerCloneL, 0);
+        CloneMovement(playerCloneR, 1);
 
     }
+
+    private void CloneMovement(GameObject clone, int code)
+    {
+        if (code == 0)
+        {
+            clone.transform.Translate(Vector3.left * 20f * Time.deltaTime);
+            if (clone.transform.position.x <= -2) canCloneMove = false;
+        }
+
+        if (code == 1)
+        {
+            clone.transform.Translate(Vector3.right * 20f * Time.deltaTime);
+            if (clone.transform.position.x >= 2) canCloneMove = false;
+        }
+    }
+
 }
