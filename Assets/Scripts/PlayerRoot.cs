@@ -14,7 +14,12 @@ public class PlayerRoot : MonoBehaviour
     [SerializeField] private float verticalSpeed = 10f;
     private float defaultVerticalSpeed;
     [SerializeField] private float gravity = 5f;
+
+    [Header("Clone Skill")]
+    [SerializeField] private float cloneSpeed = 20f;
     private bool canCloneMove;
+    private bool isCloneOut; //Para um controle mais refinado, eu teria que criar variáveis para cada clone, mas dada a 
+                             //natureza do exercício, decidi manter simples
 
 
     [Header("References")]
@@ -43,8 +48,16 @@ public class PlayerRoot : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.C))
         {
             canCloneMove = true;
-            playerCloneL.SetActive(true);
-            playerCloneR.SetActive(true);
+
+            if (!isCloneOut)
+            {
+                playerCloneL.SetActive(true);
+                playerCloneR.SetActive(true);
+            }
+            else
+            {
+
+            }
         }
 
         Clone();
@@ -103,7 +116,7 @@ public class PlayerRoot : MonoBehaviour
         }
     }
 
-    private static void DetectPinch()
+    private void DetectPinch()
     {
         if (Input.touchCount == 2)
         {
@@ -119,6 +132,9 @@ public class PlayerRoot : MonoBehaviour
             if (atualDist > startDist)
             {
                 Debug.Log("Pinch Out (Zoom In)");
+                canCloneMove = true;
+                playerCloneL.SetActive(true);
+                playerCloneR.SetActive(true);
             }
             else if (atualDist < startDist)
             {
@@ -207,9 +223,17 @@ public class PlayerRoot : MonoBehaviour
         playerObj.GetComponent<MeshRenderer>().material.color = Color.crimson;
     } //Triple Tap
 
-    private void Clone()
+    private void Clone() //Pinch Out
     {
-        if (!canCloneMove) return;
+        if (!canCloneMove || isCloneOut) return;
+        CloneMovement(playerCloneL, 0);
+        CloneMovement(playerCloneR, 1);
+
+    }
+
+    private void Unclone() //Pinch In
+    {
+        if (!canCloneMove || !isCloneOut) return;
         CloneMovement(playerCloneL, 0);
         CloneMovement(playerCloneR, 1);
 
@@ -217,16 +241,27 @@ public class PlayerRoot : MonoBehaviour
 
     private void CloneMovement(GameObject clone, int code)
     {
+        if (isCloneOut)
+
         if (code == 0)
         {
-            clone.transform.Translate(Vector3.left * 20f * Time.deltaTime);
-            if (clone.transform.position.x <= -2) canCloneMove = false;
+            clone.transform.Translate(Vector3.left * cloneSpeed * Time.deltaTime);
+            if (clone.transform.position.x <= -2)
+            {
+                canCloneMove = false;
+                isCloneOut = true;
+            }
         }
 
         if (code == 1)
         {
-            clone.transform.Translate(Vector3.right * 20f * Time.deltaTime);
-            if (clone.transform.position.x >= 2) canCloneMove = false;
+            clone.transform.Translate(Vector3.right * cloneSpeed * Time.deltaTime);
+            if (clone.transform.position.x >= 2)
+            {
+                canCloneMove = false; //Estou repetindo aqui, mas não precisaria uma vez que a bool que controla os
+                                      //os dois clones já está sendo definida no if acima
+                isCloneOut = true;
+            }
         }
     }
 
