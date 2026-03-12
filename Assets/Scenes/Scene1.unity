@@ -245,7 +245,7 @@ GameObject:
   - component: {fileID: 212874018}
   - component: {fileID: 212874017}
   m_Layer: 0
-  m_Name: Cube
+  m_Name: PlataformM
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -782,7 +782,7 @@ GameObject:
   - component: {fileID: 909434899}
   - component: {fileID: 909434898}
   m_Layer: 0
-  m_Name: Cube (2)
+  m_Name: PlataformL
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -894,7 +894,7 @@ GameObject:
   - component: {fileID: 1165758725}
   - component: {fileID: 1165758724}
   m_Layer: 0
-  m_Name: Cube (1)
+  m_Name: PlataformR
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1182,9 +1182,6 @@ MonoBehaviour:
   verticalSpeed: 10
   gravity: 10
   cloneSpeed: 20
-  canCloneMove: 0
-  isCloneMoving: 0
-  isCloneOut: 0
   playerObj: {fileID: 102249748}
   playerCloneR: {fileID: 0}
   playerCloneL: {fileID: 0}
@@ -1197,6 +1194,6 @@ SceneRoots:
   - {fileID: 832575519}
   - {fileID: 749817133}
   - {fileID: 1712346848}
-  - {fileID: 212874020}
   - {fileID: 909434901}
+  - {fileID: 212874020}
   - {fileID: 1165758727}

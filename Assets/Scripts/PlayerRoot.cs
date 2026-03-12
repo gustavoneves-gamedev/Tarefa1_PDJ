@@ -18,9 +18,9 @@ public class PlayerRoot : MonoBehaviour
     [Header("Clone Skill")]
     [SerializeField] private float cloneSpeed = 20f;
     private Vector3 defaultPosition;
-    [SerializeField] private bool canCloneMove;
-    [SerializeField] private bool isCloneMoving;
-    [SerializeField] private bool isCloneOut; //Para um controle mais refinado, eu teria que criar variáveis para cada clone, mas dada a 
+    private bool canCloneMove;
+    private bool isCloneMoving;
+    private bool isCloneOut; //Para um controle mais refinado, eu teria que criar variáveis para cada clone, mas dada a 
                              //natureza do exercício, decidi manter simples
 
 
@@ -136,16 +136,29 @@ public class PlayerRoot : MonoBehaviour
             float startDist = (start0 - start1).magnitude;
             float atualDist = (t0.position - t1.position).magnitude;
 
-            if (atualDist > startDist)
+            if (atualDist > startDist && !isCloneOut)
             {
                 Debug.Log("Pinch Out (Zoom In)");
                 canCloneMove = true;
-                playerCloneL.SetActive(true);
-                playerCloneR.SetActive(true);
+                isCloneMoving = true;
+
+                if (!isCloneOut)
+                {
+                    playerCloneL.SetActive(true);
+                    playerCloneR.SetActive(true);
+                }
             }
-            else if (atualDist < startDist)
+            else if (atualDist < startDist && isCloneOut)
             {
                 Debug.Log("Pinch In (Zoom Out)");
+                canCloneMove = true;
+                isCloneMoving = true;
+
+                if (!isCloneOut)
+                {
+                    playerCloneL.SetActive(true);
+                    playerCloneR.SetActive(true);
+                }
             }
         }
     }
