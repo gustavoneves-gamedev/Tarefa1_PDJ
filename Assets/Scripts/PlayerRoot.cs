@@ -48,7 +48,7 @@ public class PlayerRoot : MonoBehaviour
         DetectPinch();
         DetectTaps();
 
-        if (Input.GetKeyDown(KeyCode.C) && !isCloneMoving)
+        if (Input.GetKeyDown(KeyCode.C) && !isCloneMoving && playerCloneR != null)
         {
             canCloneMove = true;
             isCloneMoving = true;
