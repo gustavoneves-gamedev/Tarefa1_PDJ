@@ -1,33 +1,43 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerRoot : MonoBehaviour
 {
-
+    [Header("Touch config")]
+    [SerializeField] private float swipeDistance = 100f;
     private float lastTapTime;
     private int tapCount;
     private Vector2 startTouch;
-    [SerializeField] private float swipeDistance = 100f;
 
+    [Header("Player Movement")]
     [SerializeField] private bool isJumping;
     [SerializeField] private float verticalSpeed = 10f;
     private float defaultVerticalSpeed;
     [SerializeField] private float gravity = 5f;
 
+    [Header("Scene Manager")]
+    private bool isFirstScene;
 
+    [Header("References")]
     [SerializeField] private GameObject playerObj;
     [SerializeField] private GameObject playerCloneR;
     [SerializeField] private GameObject playerCloneL;
-    [SerializeField] private Material[] materials; //Eu iria criar materiais para fazer a troca, mas descobri que a unity tem cores padrões
+    [SerializeField] private Material[] materials; //Eu iria criar materiais para fazer a troca,
+                                                   //mas descobri que a unity tem cores padrões
     private CharacterController cc;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    
     void Start()
     {
         cc = GetComponent<CharacterController>();
         defaultVerticalSpeed = verticalSpeed;
+        SceneManager.GetActiveScene();
+        
+        SceneManager.GetActiveScene();
+        SceneManager.LoadScene(1);
     }
 
-    // Update is called once per frame
+    
     void Update()
     {
         DetectSwipes();
@@ -112,7 +122,6 @@ public class PlayerRoot : MonoBehaviour
     }
 
     #region Taps
-
     private void DetectTaps()
     {
         if (Input.touchCount == 1 && Input.GetTouch(0).phase == TouchPhase.Began || Input.GetKeyDown(KeyCode.Mouse0))
