@@ -15,9 +15,7 @@ public class PlayerRoot : MonoBehaviour
     private float defaultVerticalSpeed;
     [SerializeField] private float gravity = 5f;
 
-    [Header("Scene Manager")]
-    private bool isFirstScene;
-
+    
     [Header("References")]
     [SerializeField] private GameObject playerObj;
     [SerializeField] private GameObject playerCloneR;
@@ -26,18 +24,15 @@ public class PlayerRoot : MonoBehaviour
                                                    //mas descobri que a unity tem cores padrões
     private CharacterController cc;
 
-    
+
     void Start()
     {
         cc = GetComponent<CharacterController>();
         defaultVerticalSpeed = verticalSpeed;
-        SceneManager.GetActiveScene();
         
-        SceneManager.GetActiveScene();
-        SceneManager.LoadScene(1);
     }
 
-    
+
     void Update()
     {
         DetectSwipes();
@@ -155,8 +150,10 @@ public class PlayerRoot : MonoBehaviour
 
     private void SingleTap()
     {
-        //Colocar a troca de cena aqui
         Debug.Log("Single Tap");
+
+        if (SceneManager.GetActiveScene() == SceneManager.GetSceneByBuildIndex(0)) SceneManager.LoadScene(1);
+        else SceneManager.LoadScene(0);
     }
 
     private void DoubleTap()
