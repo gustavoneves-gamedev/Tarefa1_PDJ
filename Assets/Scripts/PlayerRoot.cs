@@ -61,7 +61,7 @@ public class PlayerRoot : MonoBehaviour
         }
 
         //Clone Skill
-        if (Input.GetKeyDown(KeyCode.C) && !isCloneMoving && playerCloneR != null)
+        if (Input.GetKeyDown(KeyCode.C) && !isCloneMoving && playerCloneR != null && playerCloneL != null)
         {
             canCloneMove = true;
             isCloneMoving = true;
@@ -136,7 +136,7 @@ public class PlayerRoot : MonoBehaviour
             float startDist = (start0 - start1).magnitude;
             float atualDist = (t0.position - t1.position).magnitude;
 
-            if (atualDist > startDist && !isCloneOut)
+            if (atualDist > startDist && !isCloneOut && playerCloneR != null)
             {
                 Debug.Log("Pinch Out (Zoom In)");
                 canCloneMove = true;
@@ -148,7 +148,7 @@ public class PlayerRoot : MonoBehaviour
                     playerCloneR.SetActive(true);
                 }
             }
-            else if (atualDist < startDist && isCloneOut)
+            else if (atualDist < startDist && isCloneOut && playerCloneR != null)
             {
                 Debug.Log("Pinch In (Zoom Out)");
                 canCloneMove = true;
