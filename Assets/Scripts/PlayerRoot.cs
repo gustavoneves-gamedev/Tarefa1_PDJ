@@ -230,15 +230,7 @@ public class PlayerRoot : MonoBehaviour
         CloneMovement(playerCloneL, 0);
         CloneMovement(playerCloneR, 1);
 
-    }
-
-    private void Unclone() //Pinch In
-    {
-        if (!canCloneMove || !isCloneOut) return;
-        CloneMovement(playerCloneL, 0);
-        CloneMovement(playerCloneR, 1);
-
-    }
+    }    
 
     private void CloneMovement(GameObject clone, int code)
     {
@@ -254,6 +246,7 @@ public class PlayerRoot : MonoBehaviour
                 canCloneMove = false;
                 isCloneOut = false;
                 isCloneMoving = false;
+                RestoreClone();
 
             }
             else if (clone.transform.position.x <= -2)
@@ -273,6 +266,7 @@ public class PlayerRoot : MonoBehaviour
                 canCloneMove = false;
                 isCloneOut = false;
                 isCloneMoving = false;
+                RestoreClone();
 
             }
             else if (clone.transform.position.x >= 2)
@@ -284,6 +278,15 @@ public class PlayerRoot : MonoBehaviour
             }
 
         }
+    }
+
+    private void RestoreClone()
+    {
+        playerCloneL.SetActive(false);
+        playerCloneR.SetActive(false);
+
+        playerCloneL.transform.position = defaultPosition;
+        playerCloneR.transform.position = defaultPosition;
     }
 
 }
