@@ -18,9 +18,9 @@ public class PlayerRoot : MonoBehaviour
     [Header("Clone Skill")]
     [SerializeField] private float cloneSpeed = 20f;
     private Vector3 defaultPosition;
-    private bool canCloneMove;
-    private bool isCloneMoving;
-    private bool isCloneOut; //Para um controle mais refinado, eu teria que criar variáveis para cada clone, mas dada a 
+    [SerializeField] private bool canCloneMove;
+    [SerializeField] private bool isCloneMoving;
+    [SerializeField] private bool isCloneOut; //Para um controle mais refinado, eu teria que criar variáveis para cada clone, mas dada a 
                              //natureza do exercício, decidi manter simples
 
 
@@ -37,7 +37,7 @@ public class PlayerRoot : MonoBehaviour
     {
         cc = GetComponent<CharacterController>();
         defaultVerticalSpeed = verticalSpeed;
-        defaultPosition = transform.position;
+        defaultPosition = playerObj.transform.position;
 
     }
 
