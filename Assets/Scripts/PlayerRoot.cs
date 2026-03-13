@@ -13,6 +13,7 @@ public class PlayerRoot : MonoBehaviour
 
     [Header("Player Movement")]
     [SerializeField] private bool isJumping;
+    [SerializeField] private bool isBackfliping;
     [SerializeField] private float verticalSpeed = 10f;
     private float defaultVerticalSpeed;
     [SerializeField] private float gravity = 5f;
@@ -49,6 +50,13 @@ public class PlayerRoot : MonoBehaviour
         DetectSwipes();
         DetectPinch();
         DetectTaps();
+
+        if (isBackfliping)
+        {
+            Backflip();
+            return;
+        }
+
 
         //Jump 
         if (Input.GetKeyDown(KeyCode.Space))
@@ -175,7 +183,7 @@ public class PlayerRoot : MonoBehaviour
     {
         if (Input.touchCount == 1 && Input.GetTouch(0).phase == TouchPhase.Ended) //|| Input.GetKeyDown(KeyCode.Mouse0)
         {
-            if (Time.time - touchTime > 0.15f || hasSwipe)
+            if (Time.time - touchTime > 0.15f || hasSwipe || isJumping || isBackfliping)
             {
                 tapCount = 0;
                 return;
@@ -184,7 +192,7 @@ public class PlayerRoot : MonoBehaviour
 
             float timeNow = Time.time;
 
-            if (timeNow - lastTapTime < 0.3f)
+            if (timeNow - lastTapTime < 0.2f)
                 tapCount++;
             else
                 tapCount = 1;
@@ -204,7 +212,8 @@ public class PlayerRoot : MonoBehaviour
             if (tapCount == 3)
             {
                 CancelInvoke();
-                Invoke("TripleTap", 0.2f); //Queria colocar instantâneo para o triple, mas decidi só reduzir o tempo para manter o paralelismo
+                Invoke("TripleTap", 0.2f); //Queria colocar instantâneo para o triple,
+                                           //mas decidi só reduzir o tempo para manter o paralelismo
             }
         }
     }
@@ -226,6 +235,7 @@ public class PlayerRoot : MonoBehaviour
     private void TripleTap()
     {
         Debug.Log("Triple Tap");
+        isBackfliping = true;
         ChangeMaterial2();
     }
 
@@ -243,6 +253,25 @@ public class PlayerRoot : MonoBehaviour
         if (cc.isGrounded)
         {
             isJumping = false;
+            verticalSpeed = defaultVerticalSpeed;
+        }
+    } //Swipe Up
+
+    private void Backflip()
+    {
+
+        Vector3 vertical = Vector3.up * verticalSpeed / 10 * Time.deltaTime;
+
+        verticalSpeed = verticalSpeed - gravity * Time.deltaTime;
+
+        playerObj.transform.RotateAroundLocal(Vector3.right, 360);
+
+        cc.Move(vertical);
+
+
+        if (cc.isGrounded)
+        {
+            isBackfliping = false;
             verticalSpeed = defaultVerticalSpeed;
         }
     } //Swipe Up
