@@ -14,6 +14,7 @@ public class PlayerRoot : MonoBehaviour
     [Header("Player Movement")]
     [SerializeField] private bool isJumping;
     [SerializeField] private bool isBackfliping;
+    private Quaternion defaultRotation;
     [SerializeField] private float verticalSpeed = 10f;
     private float defaultVerticalSpeed;
     [SerializeField] private float gravity = 5f;
@@ -41,7 +42,7 @@ public class PlayerRoot : MonoBehaviour
         cc = GetComponent<CharacterController>();
         defaultVerticalSpeed = verticalSpeed;
         defaultPosition = playerObj.transform.position;
-
+        defaultRotation = playerObj.transform.rotation;
     }
 
 
@@ -56,7 +57,6 @@ public class PlayerRoot : MonoBehaviour
             Backflip();
             return;
         }
-
 
         //Jump 
         if (Input.GetKeyDown(KeyCode.Space))
@@ -264,13 +264,15 @@ public class PlayerRoot : MonoBehaviour
 
         verticalSpeed = verticalSpeed - gravity * Time.deltaTime;
 
-        playerObj.transform.RotateAroundLocal(Vector3.right, 360);
+        //Sei que está obsoleto, mas ainda não sei mexer muito com rotação então preferi manter simples
+        playerObj.transform.RotateAroundLocal(Vector3.right, 360 * Time.deltaTime);
 
         cc.Move(vertical);
 
 
         if (cc.isGrounded)
         {
+            playerObj.transform.rotation = defaultRotation;
             isBackfliping = false;
             verticalSpeed = defaultVerticalSpeed;
         }
